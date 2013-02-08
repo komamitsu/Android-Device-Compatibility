@@ -93,20 +93,31 @@ public class MediaStoreCompat {
      * Invokes a camera capture activity.
      * @param activity the caller of the camera capture activity
      * @param requestCode
+     * @param action
      * @return a file name to be saved as.
      */
-    public String invokeCameraCapture(Activity activity, int requestCode) {
+    public String invokeCameraCapture(Activity activity, int requestCode, String action) {
         if (!hasCameraFeature(mContext)) return null;
 
         File toSave = getOutputFileUri();
         if (toSave == null) return null;
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(action);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(toSave));
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         activity.startActivityForResult(intent, requestCode);
         return toSave.toString();
+    }
+
+    /**
+     * Invokes a camera capture activity.
+     * @param activity the caller of the camera capture activity
+     * @param requestCode
+     * @return a file name to be saved as.
+     */
+    public String invokeCameraCapture(Activity activity, int requestCode) {
+    	return invokeCameraCapture(activity, requestCode, MediaStore.ACTION_IMAGE_CAPTURE);
     }
 
     /**
